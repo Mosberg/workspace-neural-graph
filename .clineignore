@@ -1,0 +1,11 @@
+node_modules/
+out/
+build/
+.git/
+package-lock.json
+*.lock
+*.log
+*.map
+*.bin
+*.4bpp*
+*.gbapal*

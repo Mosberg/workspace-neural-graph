@@ -1,5 +1,6 @@
 import * as path from "node:path";
-import * as fs from "node:fs";
+import { stat, readFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
 
 export interface DependencyLink {
   source: string;
@@ -7,19 +8,19 @@ export interface DependencyLink {
   type: "import" | "require" | "style" | "include" | "use";
 }
 
-export function parseDependencies(
+export async function parseDependencies(
   filePath: string,
   workspaceRoot: string,
   maxBytes: number,
-): DependencyLink[] {
+): Promise<DependencyLink[]> {
   const links: DependencyLink[] = [];
   const ext = path.extname(filePath).toLowerCase();
 
   try {
-    const stats = fs.statSync(filePath);
+    const stats = await stat(filePath);
     if (stats.size > maxBytes) return links;
 
-    const content = fs.readFileSync(filePath, "utf8");
+    const content = await readFile(filePath, "utf8");
     const dir = path.dirname(filePath);
 
     // 1. JavaScript & TypeScript
@@ -106,56 +107,55 @@ function resolveJsTs(
       path.join(fullCandidate, "index.js"),
     ];
     for (const c of candidates) {
-      if (fs.existsSync(c) && fs.statSync(c).isFile()) return c;
+      if (existsSync(c)) return c;
     }
   }
   return null;
 }
 
 function resolvePython(mod: string, currentDir: string, workspaceRoot: string): string | null {
-  if (mod.startsWith(".")) {
-    // Relative import
-    const normalized = mod.replace(/\./g, path.sep);
-    const candidate = path.resolve(currentDir, `${normalized}.py`);
-    if (fs.existsSync(candidate)) return candidate;
-  } else {
-    const asPath = mod.replace(/\./g, path.sep);
-    const candidates = [
-      path.resolve(currentDir, `${asPath}.py`),
-      path.resolve(workspaceRoot, `${asPath}.py`),
-      path.resolve(workspaceRoot, asPath, "__init__.py"),
-    ];
-    for (const c of candidates) {
-      if (fs.existsSync(c) && fs.statSync(c).isFile()) return c;
+    if (mod.startsWith(".")) {
+      const normalized = mod.replace(/\./g, path.sep);
+      const candidate = path.resolve(currentDir, `${normalized}.py`);
+      if (existsSync(candidate)) return candidate;
+    } else {
+      const asPath = mod.replace(/\./g, path.sep);
+      const candidates = [
+        path.resolve(currentDir, `${asPath}.py`),
+        path.resolve(workspaceRoot, `${asPath}.py`),
+        path.resolve(workspaceRoot, asPath, "__init__.py"),
+      ];
+      for (const c of candidates) {
+        if (existsSync(c)) return c;
+      }
     }
-  }
-  return null;
+    return null;
 }
 
 function resolveC(header: string, currentDir: string, workspaceRoot: string): string | null {
-  const candidates = [
-    path.resolve(currentDir, header),
-    path.resolve(workspaceRoot, header),
-    path.resolve(workspaceRoot, "include", header),
-  ];
-  for (const c of candidates) {
-    if (fs.existsSync(c) && fs.statSync(c).isFile()) return c;
-  }
-  return null;
+    const candidates = [
+      path.resolve(currentDir, header),
+      path.resolve(workspaceRoot, header),
+      path.resolve(workspaceRoot, "include", header),
+    ];
+    for (const c of candidates) {
+      if (existsSync(c)) return c;
+    }
+    return null;
 }
 
 function resolveRust(modName: string, currentDir: string): string | null {
-  const candidates = [
-    path.resolve(currentDir, `${modName}.rs`),
-    path.resolve(currentDir, modName, "mod.rs"),
-  ];
-  for (const c of candidates) {
-    if (fs.existsSync(c)) return c;
-  }
-  return null;
+    const candidates = [
+      path.resolve(currentDir, `${modName}.rs`),
+      path.resolve(currentDir, modName, "mod.rs"),
+    ];
+    for (const c of candidates) {
+      if (existsSync(c)) return c;
+    }
+    return null;
 }
 
 function resolveGenericFile(target: string, currentDir: string): string | null {
   const candidate = path.resolve(currentDir, target);
-  return fs.existsSync(candidate) ? candidate : null;
+  return existsSync(candidate) ? candidate : null;
 }

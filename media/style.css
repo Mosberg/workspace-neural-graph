@@ -7,6 +7,7 @@
     --accent-blue: #2f81f7;
     --accent-green: #238636;
     --accent-crimson: #f85149;
+    --accent-purple: #a371f7;
     --git-modified: #e3b341;
     --git-untracked: #3fb950;
     --git-added: #58a6ff;
@@ -49,7 +50,9 @@ select, input[type="text"] {
     border-radius: 6px;
     font-size: 12px;
 }
-input[type="text"] { width: 220px; }
+input[type="text"] {
+    width: 200px;
+}
 
 button {
     background: #21262d;
@@ -68,7 +71,31 @@ button:hover { background: #30363d; }
     color: #fff;
 }
 
-/* Physics Settings Sub-panel */
+body.presentation-mode #control-bar,
+body.presentation-mode #physics-panel,
+body.presentation-mode #inspector,
+body.presentation-mode #minimap-container,
+body.presentation-mode #stats-badge {
+    display: none !important;
+}
+
+#btn-exit-presentation {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: rgba(33, 38, 45, 0.85);
+    border: 1px solid var(--border-color);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    z-index: 500;
+    backdrop-filter: blur(8px);
+}
+
+#btn-exit-presentation.hidden {
+    display: none;
+}
 #physics-panel {
     background: #10141a;
     border-bottom: 1px solid var(--border-color);
@@ -90,7 +117,6 @@ button:hover { background: #30363d; }
 }
 .btn-sm { padding: 3px 8px; font-size: 11px; }
 
-/* Export Dropdown */
 .dropdown { position: relative; display: inline-block; }
 .dropdown-content {
     position: absolute;
@@ -100,7 +126,7 @@ button:hover { background: #30363d; }
     background: #161b22;
     border: 1px solid var(--border-color);
     border-radius: 6px;
-    min-width: 140px;
+    min-width: 200px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.5);
     z-index: 200;
     overflow: hidden;
@@ -121,7 +147,33 @@ button:hover { background: #30363d; }
 #viewport { width: 100%; height: 100%; cursor: grab; }
 #viewport:active { cursor: grabbing; }
 
-/* Minimap styling */
+#stage-3d {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#stage-3d.hidden {
+    display: none;
+}
+
+.cluster-boundary {
+    fill: rgba(88, 166, 255, 0.04);
+    stroke: rgba(88, 166, 255, 0.22);
+    stroke-width: 1.5px;
+    stroke-dasharray: 4, 4;
+    pointer-events: none;
+}
+
+.cluster-label {
+    fill: #58a6ff;
+    font-size: 10px;
+    font-weight: 600;
+    opacity: 0.6;
+    pointer-events: none;
+}
 #minimap-container {
     position: absolute;
     bottom: 12px;
@@ -143,19 +195,26 @@ button:hover { background: #30363d; }
     stroke-width: 1px;
 }
 
-/* Node Git status rings */
-.node circle { stroke-width: 1.5px; transition: stroke 0.2s, r 0.2s; }
-.node-file circle { fill: #1f6feb; stroke: #388bfd; }
+.node circle {
+    stroke-width: 1.5px;
+    transition: stroke 0.2s, r 0.2s;
+}
 .node-folder circle { fill: #238636; stroke: #3fb950; }
 .node-root circle { fill: #8957e5; stroke: #a371f7; }
 
 .git-status-modified circle { stroke: var(--git-modified) !important; stroke-width: 3px !important; }
 .git-status-untracked circle { stroke: var(--git-untracked) !important; stroke-width: 3px !important; }
-.git-status-added circle { stroke: var(--git-added) !important; stroke-width: 3px !important; }
-
+.git-status-added circle {
+    stroke: var(--git-added) !important;
+    stroke-width: 3px !important;
+}
 .node.circular circle { fill: #da3633 !important; stroke: #ff7b72 !important; filter: drop-shadow(0 0 6px #da3633); }
+.node.churn-hotspot circle {
+    stroke: #ff5500 !important;
+    stroke-width: 3.5px !important;
+    filter: drop-shadow(0 0 8px #ff4500);
+}
 
-/* Node selection pulse */
 .node.selected circle {
     stroke: #ffffff !important;
     stroke-width: 3.5px !important;
@@ -174,14 +233,13 @@ button:hover { background: #30363d; }
 .link-dep { stroke: var(--link-dep); stroke-width: 1.5px; opacity: 0.6; }
 .link-circular { stroke: var(--accent-crimson) !important; stroke-width: 2.5px !important; opacity: 1 !important; }
 
-/* Status Bar & Git tags */
 #stats-badge {
     position: absolute;
     bottom: 12px;
     left: 12px;
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    padding: 6px 12px;
+    padding: 6px 14px;
     border-radius: 20px;
     font-size: 11px;
     backdrop-filter: blur(6px);
@@ -190,19 +248,17 @@ button:hover { background: #30363d; }
     gap: 8px;
     z-index: 50;
 }
-.legend-sep { color: var(--border-color); }
-.git-tag { font-size: 10px; font-weight: 600; }
-.git-modified { color: var(--git-modified); }
-.git-untracked { color: var(--git-untracked); }
-.git-added { color: var(--git-added); }
+.cache-badge {
+    color: #3fb950;
+    font-weight: 600;
+}
 .cycle-warn { color: var(--accent-crimson); font-weight: 600; }
 
-/* Inspector */
 #inspector {
     position: absolute;
     top: 12px;
     right: 12px;
-    width: 310px;
+    width: 340px;
     max-height: calc(100% - 150px);
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
@@ -217,10 +273,56 @@ button:hover { background: #30363d; }
     z-index: 60;
     transition: transform 0.2s ease, opacity 0.2s ease;
 }
-#inspector.collapsed { transform: translateX(330px); opacity: 0; pointer-events: none; }
+#inspector.collapsed {
+    transform: translateX(360px);
+    opacity: 0;
+    pointer-events: none;
+}
 .inspector-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
 .field { margin: 6px 0; word-break: break-all; }
 .field label { color: var(--text-muted); display: block; font-size: 10px; text-transform: uppercase; }
+.badge-author {
+    color: var(--accent-purple);
+    font-weight: 600;
+}
+
+/* Refactor Advisor Box */
+.refactor-box {
+    background: rgba(163, 113, 247, 0.1);
+    border: 1px solid var(--accent-purple);
+    border-radius: 6px;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.refactor-desc {
+    margin: 4px 0;
+    font-size: 11px;
+    color: #d2a8ff;
+}
+
+.refactor-list {
+    padding-left: 18px;
+    margin: 4px 0;
+    font-size: 11px;
+}
+
+.refactor-list li {
+    margin: 3px 0;
+    color: var(--text-primary);
+    cursor: default;
+}
+
+.refactor-code-snippet {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    padding: 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 10px;
+    overflow-x: auto;
+    color: #79c0ff;
+}
 .alert { background: rgba(248, 81, 73, 0.15); border: 1px solid var(--accent-crimson); color: var(--accent-crimson); padding: 6px; border-radius: 4px; margin: 8px 0; }
 .hidden { display: none; }
 ul { padding-left: 16px; margin: 4px 0; max-height: 90px; overflow-y: auto; }

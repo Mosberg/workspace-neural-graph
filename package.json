@@ -2,7 +2,7 @@
   "name": "workspace-neural-graph",
   "displayName": "Workspace Neural Graph & Dependency Cockpit",
   "description": "High-performance visual interactive neural graphs, dependency matrix, circular detection, and workspace CRUD.",
-  "version": "1.1.0",
+  "version": "1.3.0",
   "publisher": "Mosberg",
   "author": {
     "name": "Mosberg",
@@ -20,8 +20,12 @@
     "Visualization",
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onCommand:workspaceNeuralGraph.openView",
+    "onCommand:workspaceNeuralGraph.refresh"
+  ],
   "main": "./out/extension.js",
+  "extensionKind": ["ui"],
   "contributes": {
     "commands": [
       {
@@ -97,12 +101,13 @@
     "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
-    "@types/node": "^26.6.6",
+    "@types/node": "^20.11.0",
     "@types/vscode": "^1.80.0",
-    "typescript": "^7.0.2"
+    "typescript": "^5.4.0"
   },
   "dependencies": {
     "@types/d3": "^7.4.3",
+    "3d-force-graph": "^1.80.1",
     "d3": "^7.9.2"
   }
 }
