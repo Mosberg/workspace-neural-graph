@@ -1,11 +1,9 @@
 {
   "name": "workspace-neural-graph",
-  "displayName": "Workspace Neural Graph & Explorer",
-  "description": "Interactive graph visualization and dependency explorer for your workspace.",
-  "version": "1.0.0",
-  "engines": {
-    "vscode": "^1.145.0"
-  },
+  "displayName": "Workspace Neural Graph & Dependency Cockpit",
+  "description": "High-performance visual interactive neural graphs, dependency matrix, circular detection, and workspace CRUD.",
+  "version": "1.1.0",
+  "publisher": "Mosberg",
   "author": {
     "name": "Mosberg",
     "url": "https://github.com/Mosberg/workspace-neural-graph"
@@ -15,6 +13,9 @@
     "url": "https://github.com/Mosberg/workspace-neural-graph.git"
   },
   "license": "MIT",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
   "categories": [
     "Visualization",
     "Other"
@@ -27,6 +28,11 @@
         "command": "workspaceNeuralGraph.openView",
         "title": "Neural Graph: Open Workspace Visualizer",
         "icon": "$(type-hierarchy)"
+      },
+      {
+        "command": "workspaceNeuralGraph.refresh",
+        "title": "Neural Graph: Rescan Workspace",
+        "icon": "$(refresh)"
       }
     ],
     "menus": {
@@ -35,7 +41,54 @@
           "command": "workspaceNeuralGraph.openView",
           "group": "navigation"
         }
+      ],
+      "view/title": [
+        {
+          "command": "workspaceNeuralGraph.refresh",
+          "when": "view == workspaceNeuralGraph",
+          "group": "navigation"
+        }
       ]
+    },
+    "configuration": {
+      "title": "Workspace Neural Graph",
+      "properties": {
+        "neuralGraph.excludePatterns": {
+          "type": "array",
+          "default": [
+            "node_modules",
+            ".git",
+            ".vscode",
+            "dist",
+            "out",
+            "build",
+            ".cache",
+            "__pycache__",
+            "target"
+          ],
+          "description": "List of directory or file patterns to ignore during scan."
+        },
+        "neuralGraph.detectCircularDependencies": {
+          "type": "boolean",
+          "default": true,
+          "description": "Highlight cyclic dependency chains in bright red."
+        },
+        "neuralGraph.maxFileSizeKB": {
+          "type": "number",
+          "default": 1024,
+          "description": "Maximum file size in KB to scan for import/dependency links."
+        },
+        "neuralGraph.defaultLayout": {
+          "type": "string",
+          "enum": [
+            "force",
+            "tree",
+            "radial"
+          ],
+          "default": "force",
+          "description": "Initial layout engine to render on open."
+        }
+      }
     }
   },
   "scripts": {
@@ -45,7 +98,11 @@
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
-    "@types/vscode": "^1.145.0",
+    "@types/vscode": "^1.80.0",
     "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@types/d3": "^7.4.3",
+    "d3": "^7.9.2"
   }
 }
