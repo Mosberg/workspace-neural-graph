@@ -1,0 +1,51 @@
+{
+  "name": "workspace-neural-graph",
+  "displayName": "Workspace Neural Graph & Explorer",
+  "description": "Interactive graph visualization and dependency explorer for your workspace.",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.145.0"
+  },
+  "author": {
+    "name": "Mosberg",
+    "url": "https://github.com/Mosberg/workspace-neural-graph"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mosberg/workspace-neural-graph.git"
+  },
+  "license": "MIT",
+  "categories": [
+    "Visualization",
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "workspaceNeuralGraph.openView",
+        "title": "Neural Graph: Open Workspace Visualizer",
+        "icon": "$(type-hierarchy)"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "workspaceNeuralGraph.openView",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/vscode": "^1.145.0",
+    "typescript": "^7.0.2"
+  }
+}

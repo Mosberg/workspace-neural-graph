@@ -1,0 +1,31 @@
+name: 🐛 Bug Report
+description: File a bug report to help us improve.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for reporting an issue!
+  - type: input
+    id: version
+    attributes:
+      label: Extension Version
+      description: What version of the extension are you running?
+      placeholder: e.g. 1.0.2
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: How do we trigger this bug?
+      placeholder: |
+        1. Open workspace with ...
+        2. Run 'Neural Graph: Open Workspace Visualizer'
+        3. Click on ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Developer Tools Console Output
+      description: Open Help -> Toggle Developer Tools and paste any red console errors.
