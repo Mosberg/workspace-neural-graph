@@ -1,35 +1,17 @@
 {
   "compilerOptions": {
-    /* Base Options */
     "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "lib": ["ES2022"],
     "rootDir": "./src",
-    "outDir": "./dist",
-
-    /* Relaxed Type-Checking for Fast Prototyping */
-    "strict": false,
-    "noImplicitAny": false,
-    "strictNullChecks": false,
-    "strictPropertyInitialization": false,
-    "noUncheckedIndexedAccess": false,
-    "exactOptionalPropertyTypes": false,
-
-    /* Permissive Variable & Flow Rules */
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noImplicitReturns": false,
-    "noFallthroughCasesInSwitch": false,
-
-    /* Emit & Module Interop */
+    "outDir": "./out",
+    "types": ["node", "vscode"],
     "esModuleInterop": true,
-    "allowJs": true,
-    "checkJs": false,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "sourceMap": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "out"]
 }
